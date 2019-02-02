@@ -1,0 +1,5 @@
+F:\#FICHIER\ITI-Train\AppByte\Transpilation\bin\Debug\netcoreapp2.0\Transpilation.deps.json
+F:\#FICHIER\ITI-Train\AppByte\Transpilation\bin\Debug\netcoreapp2.0\Transpilation.dll
+F:\#FICHIER\ITI-Train\AppByte\Transpilation\obj\Debug\netcoreapp2.0\Transpilation.csproj.CoreCompileInputs.cache
+F:\#FICHIER\ITI-Train\AppByte\Transpilation\obj\Debug\netcoreapp2.0\Transpilation.AssemblyInfoInputs.cache
+F:\#FICHIER\ITI-Train\AppByte\Transpilation\obj\Debug\netcoreapp2.0\Transpilation.AssemblyInfo.cs
