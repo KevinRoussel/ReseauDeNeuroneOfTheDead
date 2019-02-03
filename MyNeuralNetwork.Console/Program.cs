@@ -21,7 +21,7 @@ namespace MyNeuralNetwork.Console
 
                 System.Console.ReadLine();
             }
-            image.Close();
+            image.Dispose();
 
         }
 

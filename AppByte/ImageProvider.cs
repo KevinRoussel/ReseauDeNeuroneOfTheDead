@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Transpilation
 {
-    public class ImageProvider
+    public class ImageProvider : IDisposable
     {
         FileStream ifsLabels;
         FileStream ifsImages;
@@ -44,7 +44,7 @@ namespace Transpilation
             _isFull = false;
         }
 
-        public void Close()
+        public void Dispose()
         {
             ifsImages.Dispose();
             ifsImages.Dispose();

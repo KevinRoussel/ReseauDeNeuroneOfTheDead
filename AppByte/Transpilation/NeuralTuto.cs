@@ -2,13 +2,43 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using MathNet.Numerics.LinearAlgebra;
+using Newtonsoft.Json;
 
 namespace Transpilation
 {
+    public class FlatNetwork
+    {
+        public FlatNetwork()
+        {
+            Layers = new List<FlatLayer>();
+        }
+        public List<FlatLayer> Layers { get; private set; }
+    }
+    public class FlatLayer
+    {
+        public FlatLayer()
+        {
+            Neurons = new List<FlatNeuron>();
+        }
+        public List<FlatNeuron> Neurons { get; private set; }
+    }
+    public class FlatNeuron
+    {
+        public FlatNeuron()
+        {
+            Weights = new List<double>();
+            Bias = 0;
+        }
+        public List<double> Weights { get; private set; }
+        public double Bias { get; set; }
+    }
+
     public class Program
     {
         public static void Main()
         {
+            Console.WriteLine("##### Neural Network of the Dead #####");
+
             // Adaptation du modèle en matrice
             var imageProvider = new ImageProvider().ImageStream().ToList();
             List<Vector<double>> X = new List<Vector<double>>( imageProvider.Select( i => i.SampledPixels ).Select( i => Vector<double>.Build.DenseOfEnumerable( i ) ) );
@@ -17,18 +47,27 @@ namespace Transpilation
             var net = new Network( 784 );
             net.AddLayer( 200 );
             net.AddLayer( 10 );
-
             Console.WriteLine( $"Start Training ... {DateTime.Now}" );
             net.Train( X, Y );
-            Console.WriteLine( $"Training Fnished ... {DateTime.Now}" );
+            Console.WriteLine( $"Training Finished ... {DateTime.Now}" );
 
-            Console.WriteLine( $"Evaluatation ..." );
+            Console.WriteLine("Writing Neural Network Snapshot...");
+            string json = JsonConvert.SerializeObject( net.ToFlatNetwork() );
+            System.IO.File.WriteAllText( @"E:\neuralNetwork.json", json );
+            Console.WriteLine( "Writing Done ..." );
 
+            Console.WriteLine( $"Evaluation ..." );
             foreach(var el in X.Zip(Y, ( input, expected ) => new { input, expected } ))
             {
-                Console.WriteLine($"Expected : {el.expected}, Output :{net.Predict( el.input)} ");
+                List<double> output = null;
+                Console.WriteLine($"Expected : {el.expected}, Output :{net.Predict( el.input, ref output)} ");
+                foreach(var outputline in output.Select( ( i, idx ) => new { i, idx } ))
+                {
+                    Console.WriteLine($"idx {outputline.idx} => {outputline.i}");
+                }
                 Console.ReadLine();
             }
+
             Console.ReadLine();
 
         }
@@ -60,6 +99,28 @@ namespace Transpilation
                 list[k] = list[n];
                 list[n] = value;
             }
+        }
+
+        public static FlatNetwork ToFlatNetwork(this Network @this)
+        {
+            var net = new FlatNetwork();
+            foreach( var layer in @this.layers )
+            {
+                var flatLayer = new FlatLayer();
+                for( var i = 0; i < layer.Weights.RowCount; i++ )
+                {
+                    var el = new { w = layer.Weights.Row( i ), b = layer.Biases[i] };
+
+                    var flatNeuron = new FlatNeuron();
+                    flatNeuron.Weights.AddRange(el.w);
+                    flatNeuron.Bias = el.b;
+
+                    flatLayer.Neurons.Add( flatNeuron );
+                }
+
+                net.Layers.Add( flatLayer );
+            }
+            return net;
         }
     }
 
@@ -145,7 +206,7 @@ namespace Transpilation
         /// <summary>
         /// Les différentes couches de neurones du réseaux (hors input, output compris)
         /// </summary>
-        List<Layer> layers;
+        internal List<Layer> layers;
 
         /// <summary>
         /// Création d'un réseau de neurone
@@ -185,19 +246,23 @@ namespace Transpilation
         /// </summary>
         /// <param name="inputData">Input</param>
         /// <returns>Réponse du réseau</returns>
-        public int Predict( Vector<double> inputData )
-            => FeedForward( inputData ).Select( ( i, idx ) => (idx: idx, i: i) ).OrderByDescending( i => i.i ).First().idx;
+        public int Predict( Vector<double> inputData, ref List<double> outputNeural )
+        {
+            var result = FeedForward( inputData );
+            outputNeural = new List<double>( result );
+            return result.Select( ( i, idx ) => (idx: idx, i: i) ).OrderByDescending( i => i.i ).First().idx;
+        }
 
         /// <summary>
         /// Reçoit plusieurs images, et calcul le taux de bonne réponse du réseau
         /// </summary>
         /// <param name="images">List of image (List<double>) </param>
         /// <param name="responses">List of expected result</param>
-        public double Evaluate( Matrix<double> images, Vector<int> responses )
-            => images.AsRowArrays()
-                .Zip( responses, ( image, expected ) => new { image, expected } )
-                .Select( i => Predict( Vector<double>.Build.DenseOfArray(i.image) ) == i.expected ? 1 : 0 )
-                .Sum() / images.RowCount;
+        //public double Evaluate( Matrix<double> images, Vector<int> responses )
+        //    => images.AsRowArrays()
+        //        .Zip( responses, ( image, expected ) => new { image, expected } )
+        //        .Select( i => Predict( Vector<double>.Build.DenseOfArray(i.image) ) == i.expected ? 1 : 0, null )
+        //        .Sum() / images.RowCount;
            
 
 
@@ -209,15 +274,17 @@ namespace Transpilation
         /// <param name="steps">Iteraion</param>
         /// <param name="learningRate"></param>
         /// <param name="batchSize"></param>
-        public void Train( List<Vector<double>> X, List<int> Y, int steps = 30, double learningRate = 0.3, int batchSize = 10 )
+        public void Train( List<Vector<double>> X, List<int> Y, inst steps = 30, double learningRate = 0.3, int batchSize = 10, int maxsize = -1 )
         {
-            var n = Y.Count;
+            maxsize = maxsize != -1 ? maxsize : Y.Count;
             for( var i = 0; i < steps; i++ )
             {
                 X.Shuffle( i );
                 Y.Shuffle( i );
-                for( var batchStart = 0; batchStart < n; batchStart += batchSize )
+                for( var batchStart = 0; batchStart < maxsize; batchStart += batchSize )
                 {
+                    Console.WriteLine( $"step {i} / {steps} => batch {batchStart} / {maxsize}... " );
+
                     var X_batch = X.Skip( batchStart ).Take( batchSize ).ToList();
                     var Y_batch = Y.Skip( batchStart ).Take( batchSize ).ToList();
                     TrainBatch( X_batch, Y_batch, learningRate );

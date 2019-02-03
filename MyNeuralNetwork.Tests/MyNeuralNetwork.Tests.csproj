@@ -14,8 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MyNeuralNetwork\MyNeuralNetwork.csproj" />
-    <ProjectReference Include="..\NeuralNetwork\NeuralNet.csproj" />
+    <ProjectReference Include="..\AppByte\AppByte.csproj" />
   </ItemGroup>
 
 </Project>
