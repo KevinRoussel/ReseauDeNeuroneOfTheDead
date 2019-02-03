@@ -10,7 +10,7 @@ namespace MyNeuralNetwork.Tests
         [Fact]
         public void Test1()
         {
-
+            Assert.True(true);
         }
 
         [Fact]
@@ -67,6 +67,16 @@ namespace MyNeuralNetwork.Tests
                 }
             }
         }
+
+        [Fact]
+        public void TestSigmoid()
+        {
+
+
+
+
+        }
+
 
 
     }
