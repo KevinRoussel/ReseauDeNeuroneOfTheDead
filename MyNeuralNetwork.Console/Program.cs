@@ -1,14 +1,14 @@
-using Transpilation;
+using NeuralNetwork.Correction;
 using System;
 using System.Linq;
 
-namespace MyNeuralNetwork.Console
+namespace NeuralNetwork.Console
 {
     class Program
     {
         static void Main(string[] args)
         {
-            Transpilation.Program.Main();
+            Runner.Main();
         }
 
         static void ShowDatabase()

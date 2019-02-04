@@ -1,9 +1,9 @@
 using System;
 using System.Linq;
-using Transpilation;
+using NeuralNetwork.Correction;
 using Xunit;
 
-namespace MyNeuralNetwork.Tests
+namespace NeuralNetwork.Tests
 {
     public class InternalTest
     {

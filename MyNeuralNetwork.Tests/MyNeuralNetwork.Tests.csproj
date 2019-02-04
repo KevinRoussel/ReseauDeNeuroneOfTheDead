@@ -15,8 +15,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AppByte\AppByte.csproj" />
-    <ProjectReference Include="..\NeuralBase\NeuralBase.csproj" />
+    <ProjectReference Include="..\AppByte\NeuralNetwork.Correction.csproj" />
+    <ProjectReference Include="..\NeuralBase\NeuralNetwork.csproj" />
   </ItemGroup>
 
 </Project>

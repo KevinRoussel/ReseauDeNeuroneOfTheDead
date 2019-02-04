@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace NeuralNetwork
+namespace NeuralNetwork.Correction
 {
     public class Neuron
     {
@@ -20,8 +20,9 @@ namespace NeuralNetwork
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public double Aggregation(List<double> input)
+        public double Aggregation( List<double> input )
         {
+            return Weights.Zip( input, ( a, b ) => a * b ).Sum() + Bias;
             throw new NotImplementedException();
         }
 
@@ -32,7 +33,9 @@ namespace NeuralNetwork
         /// <returns></returns>
         public double Activation( List<double> input )
         {
+            return Help.Sigmoid( Aggregation( input ) );
             throw new NotImplementedException();
         }
     }
+
 }

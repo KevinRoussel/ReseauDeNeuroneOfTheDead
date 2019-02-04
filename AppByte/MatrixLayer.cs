@@ -1,18 +1,36 @@
 using MathNet.Numerics.LinearAlgebra;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
-namespace NeuralNetwork
+namespace NeuralNetwork.Correction
 {
     public class MatrixLayer
     {
+        /// <summary>
+        /// Matrice contenant contenant pour chaque neurone, les poids de chaque entré
+        /// Fonctionne grossièrement comme un tableau [,]
+        /// Weights[i][j] => neurone numéro [i] au poid numéro[j]
+        /// </summary>
         public Matrix<double> Weights { get; private set; }
+        /// <summary>
+        /// Matrice contenant contenant pour chaque neurone, le biais
+        /// Fonctionne grossièrement comme un tableau []
+        /// Bias[i] => biais du neurone numéro [i]
+        /// </summary>
         public Vector<double> Biases { get; private set; }
+        /// <summary>
+        /// Nombre de neurone contenu dans le layer
+        /// </summary>
+        public int Size => Weights.RowCount;
 
-        public int Size => throw new NotImplementedException();
-
-        public MatrixLayer(int size, int inputSize, Random generator)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="size">Nombre de neurone sur cette couche</param>
+        /// <param name="inputSize">Nombre de neurone sur la couche précédente</param>
+        public MatrixLayer( int size, int inputSize, Random generator )
         {
             Weights = Matrix<double>.Build.Dense( size, inputSize, ( i, j ) => generator.NextDouble() );
             Biases = Vector<double>.Build.Dense( size, ( i ) => generator.NextDouble() );
@@ -24,7 +42,7 @@ namespace NeuralNetwork
         /// <param name="data">input ou la valeur de la couche précédente</param>
         /// <returns>Valeur de la couche actuelle (un double de sortie par neurone)</returns>
         public Vector<double> Forward( Vector<double> data )
-            => throw new NotImplementedException();
+            => Activation( Aggregation( data ) );
 
         /// <summary>
         /// Pour chaque neurone, calcul la somme des input*weight + biais
@@ -32,7 +50,7 @@ namespace NeuralNetwork
         /// <param name="data">input ou valeur de la couche précédente</param>
         /// <returns>Valeur temporaire de chaque neurone</returns>
         public Vector<double> Aggregation( Vector<double> data )
-            => throw new NotImplementedException();
+            => Weights * data + Biases;
 
         /// <summary>
         /// Valeur finale de chaque neurone en appliquant la sigmoid
@@ -40,37 +58,23 @@ namespace NeuralNetwork
         /// <param name="x">Aggregat pour chaque neurone</param>
         /// <returns>Valeur finale du neurone</returns>
         public Vector<double> Activation( Vector<double> x )
-            => throw new NotImplementedException();
+            => Vector<double>.Build.DenseOfEnumerable( x.Select( i => Help.Sigmoid( i ) ) );
 
-        /// <summary>
-        /// Dérivé de la valeur finale de chaque neurone
-        /// </summary>
-        /// <param name="x">Aggregat pour chaque neurone</param>
-        /// <returns>Valeur dérivée du neurone</returns>
+
+
         public Vector<double> ActivationPrime( Vector<double> x )
         {
-           throw new NotImplementedException();
+            return Vector<double>.Build.DenseOfEnumerable( x.Select( i => Help.SigmoidPrime( i ) ) );
         }
-
-        /// <summary>
-        /// Met à jour les weights de la couche basé sur le gradient calculé
-        /// </summary>
-        /// <param name="gradient"></param>
-        /// <param name="learningRate"></param>
         public void UpdateWeighs( Matrix<double> gradient, double learningRate )
         {
-            throw new NotImplementedException();
+            Weights -= learningRate * gradient;
         }
-
-        /// <summary>
-        /// Met à jour les biais de la couche basé sur le gradient calculé
-        /// </summary>
-        /// <param name="gradient"></param>
-        /// <param name="learningRate"></param>
         public void UpdateBiases( Vector<double> gradient, double learningRate )
         {
-            throw new NotImplementedException();
+            Biases -= learningRate * gradient;
         }
 
     }
+
 }

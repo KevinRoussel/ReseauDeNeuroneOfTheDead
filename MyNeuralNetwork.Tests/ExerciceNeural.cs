@@ -1,15 +1,16 @@
-using MyNeuralNetwork.Tests.Interfaces;
+using NeuralNetwork.Tests.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using Xunit;
 using System.Linq;
-
 using MathNet.Numerics.LinearAlgebra;
-//using Transpilation;
-using NeuralBase;
 
-namespace MyNeuralNetwork.Tests
+
+//using NeuralNetwork.Correction;
+using NeuralNetwork;
+
+namespace NeuralNetwork.Tests
 {
     public class ExerciceNeural
     {

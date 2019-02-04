@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Transpilation
+namespace NeuralNetwork.Correction
 {
     public class DigitImage
     {

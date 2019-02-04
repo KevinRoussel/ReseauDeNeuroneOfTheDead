@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AppByte\AppByte.csproj" />
+    <ProjectReference Include="..\AppByte\NeuralNetwork.Correction.csproj" />
   </ItemGroup>
 
 </Project>

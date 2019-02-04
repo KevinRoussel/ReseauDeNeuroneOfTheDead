@@ -1,7 +1,7 @@
 using System;
 using System.Numerics;
 
-namespace NeuralBase
+namespace NeuralNetwork
 {
     public class Help
     {

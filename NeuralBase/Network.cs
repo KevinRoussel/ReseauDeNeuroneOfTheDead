@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace NeuralBase
+namespace NeuralNetwork
 {
     public class Network
     {
