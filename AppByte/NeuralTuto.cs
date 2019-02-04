@@ -43,10 +43,10 @@ namespace Transpilation
             var imageProvider = new ImageProvider().ImageStream().ToList();
             List<Vector<double>> X = new List<Vector<double>>( imageProvider.Select( i => i.SampledPixels ).Select( i => Vector<double>.Build.DenseOfEnumerable( i ) ) );
             List<int> Y = imageProvider.Select( i => i.Label ).ToList();
-
-            var net = new Network( 784 );
-            net.AddLayer( 200 );
-            net.AddLayer( 10 );
+            Random r = new Random( 1 );
+            var net = new MatrixNetwork( 784 );
+            net.AddLayer( 200,r );
+            net.AddLayer( 10,r );
             Console.WriteLine( $"Start Training ... {DateTime.Now}" );
             net.Train( X, Y );
             Console.WriteLine( $"Training Finished ... {DateTime.Now}" );
@@ -60,7 +60,7 @@ namespace Transpilation
             foreach(var el in X.Zip(Y, ( input, expected ) => new { input, expected } ))
             {
                 List<double> output = null;
-                Console.WriteLine($"Expected : {el.expected}, Output :{net.Predict( el.input, ref output)} ");
+                Console.WriteLine($"Expected : {el.expected}, Output :{net.Predict( el.input, out output)} ");
                 foreach(var outputline in output.Select( ( i, idx ) => new { i, idx } ))
                 {
                     Console.WriteLine($"idx {outputline.idx} => {outputline.i}");
@@ -101,10 +101,10 @@ namespace Transpilation
             }
         }
 
-        public static FlatNetwork ToFlatNetwork(this Network @this)
+        public static FlatNetwork ToFlatNetwork(this MatrixNetwork @this)
         {
             var net = new FlatNetwork();
-            foreach( var layer in @this.layers )
+            foreach( var layer in @this.Layers )
             {
                 var flatLayer = new FlatLayer();
                 for( var i = 0; i < layer.Weights.RowCount; i++ )
@@ -125,7 +125,7 @@ namespace Transpilation
 
     }
 
-    public class Layer
+    public class MatrixLayer
     {
         /// <summary>
         /// Matrice contenant contenant pour chaque neurone, les poids de chaque entré
@@ -149,11 +149,10 @@ namespace Transpilation
         /// </summary>
         /// <param name="size">Nombre de neurone sur cette couche</param>
         /// <param name="inputSize">Nombre de neurone sur la couche précédente</param>
-        public Layer( int size, int inputSize )
+        public MatrixLayer( int size, int inputSize, Random generator )
         {
-            Random r = new Random( 1 );
-            Weights = Matrix<double>.Build.Dense( size, inputSize, ( i, j ) => r.NextDouble() );
-            Biases = Vector<double>.Build.Dense( size, ( i ) => r.NextDouble() );
+            Weights = Matrix<double>.Build.Dense( size, inputSize, ( i, j ) => generator.NextDouble() );
+            Biases = Vector<double>.Build.Dense( size, ( i ) => generator.NextDouble() );
         }
 
         /// <summary>
@@ -197,7 +196,7 @@ namespace Transpilation
 
     }
 
-    public class Network
+    public class MatrixNetwork
     {
         /// <summary>
         /// Nombre d'input que l'on a en entré
@@ -207,24 +206,28 @@ namespace Transpilation
         /// <summary>
         /// Les différentes couches de neurones du réseaux (hors input, output compris)
         /// </summary>
-        internal List<Layer> layers;
+        List<MatrixLayer> layers;
+        public IEnumerable<MatrixLayer> Layers => layers;
 
         /// <summary>
         /// Création d'un réseau de neurone
         /// </summary>
         /// <param name="inputDim">nombre d'entré pour le réseau</param>
-        public Network( int inputDim )
+        public MatrixNetwork( int inputDim )
         {
             this.inputDim = inputDim;
-            layers = new List<Layer>();
+            layers = new List<MatrixLayer>();
         }
 
         /// <summary>
         /// Ajoute un layer au network de la taille renseigné
         /// </summary>
         /// <param name="size">Nombre de neurone du layer créé</param>
-        public void AddLayer( int size )
-            => layers.Add( new Layer( size, layers.Count>0 ? layers.Last().Size: inputDim ) );
+        public MatrixNetwork AddLayer( int size, Random r )
+        {
+            layers.Add( new MatrixLayer( size, layers.Count>0 ? layers.Last().Size: inputDim, r ) );
+            return this;
+        }
 
         /// <summary>
         /// Récupère l'entré et propage l'information au travers du réseau
@@ -247,7 +250,7 @@ namespace Transpilation
         /// </summary>
         /// <param name="inputData">Input</param>
         /// <returns>Réponse du réseau</returns>
-        public int Predict( Vector<double> inputData, ref List<double> outputNeural )
+        public int Predict( Vector<double> inputData, out List<double> outputNeural )
         {
             var result = FeedForward( inputData );
             outputNeural = new List<double>( result );
@@ -275,7 +278,7 @@ namespace Transpilation
         /// <param name="steps">Iteraion</param>
         /// <param name="learningRate"></param>
         /// <param name="batchSize"></param>
-        public void Train( List<Vector<double>> X, List<int> Y, inst steps = 30, double learningRate = 0.3, int batchSize = 10, int maxsize = -1 )
+        public void Train( List<Vector<double>> X, List<int> Y, int steps = 30, double learningRate = 0.3, int batchSize = 10, int maxsize = -1 )
         {
             maxsize = maxsize != -1 ? maxsize : Y.Count;
             for( var i = 0; i < steps; i++ )
@@ -314,7 +317,7 @@ namespace Transpilation
             var avg_bias_gradient = bias_gradient.Select( bg => bg / Y.Count ).ToList();
 
             foreach( var el in
-                this.layers.Zip( avg_weight_gradient, ( a, b ) => new Tuple<Layer,Matrix<double>>(a, b) )
+                this.layers.Zip( avg_weight_gradient, ( a, b ) => new Tuple<MatrixLayer,Matrix<double>>(a, b) )
                 .Zip( avg_bias_gradient, ( el, c ) => new { layer = el.Item1, weight_gradient= el.Item2, bias_gradient= c}))
             {
                 el.layer.UpdateWeighs( el.weight_gradient, learningRate );
@@ -399,6 +402,50 @@ namespace Transpilation
             return activations - target;
         }
 
+    }
+
+    public class Neuron
+    {
+        public List<double> Weights { get; set; }
+        public double Bias { get; set; }
+
+        public Neuron()
+        {
+            Weights = new List<double>();
+        }
+
+        /// <summary>
+        /// Somme des Weight*Input + bias
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public double Aggregation( List<double> input )
+        {
+            return Weights.Zip( input, ( a, b ) => a * b ).Sum() + Bias;
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Valeur du neurone, sigmoid de l'aggregation
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public double Activation( List<double> input )
+        {
+            return Help.Sigmoid( Aggregation( input ) );
+            throw new NotImplementedException();
+        }
+    }
+
+    public class Layer
+    {
+        public List<Neuron> Neurons { get; set; }
+    
+        public List<double> Compute( List<double> input )
+        {
+            return Neurons.Select( i => i.Activation( input ) ).ToList();
+            throw new NotImplementedException();
+        }
     }
 
 }

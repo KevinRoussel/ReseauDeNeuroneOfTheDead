@@ -4,7 +4,7 @@ using System.Text;
 
 namespace NeuralBase
 {
-    class Network
+    public class Network
     {
         List<Layer> Layers { get; set; }
 

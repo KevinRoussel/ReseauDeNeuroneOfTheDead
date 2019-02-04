@@ -5,16 +5,17 @@ using System.Text;
 
 namespace NeuralBase
 {
-    class MatrixLayer
+    public class MatrixLayer
     {
         public Matrix<double> Weights { get; private set; }
         public Vector<double> Biases { get; private set; }
 
         public int Size => throw new NotImplementedException();
 
-        public MatrixLayer(int size, int inputSize)
+        public MatrixLayer(int size, int inputSize, Random generator)
         {
-            throw new NotImplementedException();
+            Weights = Matrix<double>.Build.Dense( size, inputSize, ( i, j ) => generator.NextDouble() );
+            Biases = Vector<double>.Build.Dense( size, ( i ) => generator.NextDouble() );
         }
 
         /// <summary>
@@ -50,10 +51,22 @@ namespace NeuralBase
         {
            throw new NotImplementedException();
         }
+
+        /// <summary>
+        /// Met à jour les weights de la couche basé sur le gradient calculé
+        /// </summary>
+        /// <param name="gradient"></param>
+        /// <param name="learningRate"></param>
         public void UpdateWeighs( Matrix<double> gradient, double learningRate )
         {
             throw new NotImplementedException();
         }
+
+        /// <summary>
+        /// Met à jour les biais de la couche basé sur le gradient calculé
+        /// </summary>
+        /// <param name="gradient"></param>
+        /// <param name="learningRate"></param>
         public void UpdateBiases( Vector<double> gradient, double learningRate )
         {
             throw new NotImplementedException();

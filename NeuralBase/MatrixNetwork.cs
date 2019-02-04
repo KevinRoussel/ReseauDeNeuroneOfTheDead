@@ -5,7 +5,7 @@ using System.Text;
 
 namespace NeuralBase
 {
-    class MatrixNetwork
+    public class MatrixNetwork
     {
         public int InputSize { get; private set; }
         public List<MatrixLayer> Layers { get; private set; }
@@ -15,7 +15,11 @@ namespace NeuralBase
             throw new NotImplementedException();
         }
 
-        public void AddLayer(int size)
+        /// <summary>
+        /// Ajoute un layer de [Size] neurone
+        /// </summary>
+        /// <param name="size"></param>
+        public MatrixNetwork AddLayer(int size, Random r)
         {
             throw new NotImplementedException();
         }
@@ -35,7 +39,7 @@ namespace NeuralBase
         /// </summary>
         /// <param name="inputData">Input</param>
         /// <returns>Réponse du réseau</returns>
-        public int Predict( Vector<double> inputData, ref List<double> outputNeural )
+        public int Predict( Vector<double> inputData, out List<double> outputNeural )
         {
             throw new NotImplementedException();
         }

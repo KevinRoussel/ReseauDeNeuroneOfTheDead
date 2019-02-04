@@ -68,16 +68,6 @@ namespace MyNeuralNetwork.Tests
             }
         }
 
-        [Fact]
-        public void TestSigmoid()
-        {
-
-
-
-
-        }
-
-
 
     }
 }
