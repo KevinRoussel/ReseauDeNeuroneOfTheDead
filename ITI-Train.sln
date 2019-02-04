@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2027
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyNeuralNetwork.Tests", "MyNeuralNetwork.Tests\MyNeuralNetwork.Tests.csproj", "{BF96A77A-99CB-4E16-92BA-EA9B855293D1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NeuralNetwork.Tests", "MyNeuralNetwork.Tests\NeuralNetwork.Tests.csproj", "{BF96A77A-99CB-4E16-92BA-EA9B855293D1}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NeuralNetwork.Correction", "AppByte\NeuralNetwork.Correction.csproj", "{9140774B-768B-4336-B383-FCA4622FA27B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyNeuralNetwork.Console", "MyNeuralNetwork.Console\MyNeuralNetwork.Console.csproj", "{B2C44498-9A28-4AA5-9420-E720B7B7A9D7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NeuralNetwork", "NeuralBase\NeuralNetwork.csproj", "{AB422B69-C198-4DE8-BB75-ED08D42A8835}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NeuralNetwork.Impl", "NeuralBase\NeuralNetwork.Impl.csproj", "{AB422B69-C198-4DE8-BB75-ED08D42A8835}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

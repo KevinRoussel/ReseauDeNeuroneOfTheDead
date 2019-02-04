@@ -22,7 +22,6 @@ namespace NeuralNetwork.Console
                 System.Console.ReadLine();
             }
             image.Dispose();
-
         }
 
     }
