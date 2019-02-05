@@ -35,8 +35,8 @@ namespace ITI.NeuralNetwork.Correction
         public ImageProvider(string labelDatabasePath, string imagesDatabasePath)
         {
             // Opening data
-            ifsLabels = new FileStream( labelDatabasePath, FileMode.Open ); // test labels
-            ifsImages = new FileStream( imagesDatabasePath, FileMode.Open ); // test images
+            ifsLabels = new FileStream( labelDatabasePath, FileMode.Open, FileAccess.Read ); // test labels
+            ifsImages = new FileStream( imagesDatabasePath, FileMode.Open, FileAccess.Read ); // test images
             brLabels = new BinaryReader( ifsLabels );
             brImages = new BinaryReader( ifsImages );
 

@@ -5,7 +5,6 @@ using Xunit;
 using System.Linq;
 using MathNet.Numerics.LinearAlgebra;
 
-
 using ITI.NeuralNetwork;
 
 namespace NeuralNetwork.Tests
@@ -183,7 +182,6 @@ namespace NeuralNetwork.Tests
 
             net.AddLayer( 3, r );
             Assert.Equal( 2, net.Layers.Count() );
-
         }
 
         [Fact]
@@ -223,32 +221,33 @@ namespace NeuralNetwork.Tests
         [Fact]
         void TrainWorks()
         {
-            var imageProvider = new ImageProvider()
-                    .ImageStream();
-
-            List<(Vector<double>,int)> tmp = imageProvider
-                    .Select( i => new { pixels = i.SampledPixels, i.Label } )
-                    .Select( i => (Vector<double>.Build.DenseOfEnumerable( i.pixels ), i.Label )).ToList();
-            var X = tmp.Select( i => i.Item1 ).ToList();
-            var Y = tmp.Select( i => i.Item2 ).ToList();
-
-             imageProvider.Select( i => i.Label ).ToList();
-            Random r = new Random( 1 );
-            var net = new MatrixNetwork( 784 );
-            net.AddLayer( 200, r );
-            net.AddLayer( 10, r );
-            net.Train( X, Y );
-
-            int performance = 0;
-            int total = 0;
-            foreach( var el in X.Zip( Y, ( input, expected ) => new { input, expected } ) )
+            using( var ip = new ImageProvider())
             {
-                total++;
-                var result = net.Predict( el.input, out List<double> output );
-                if( el.expected == result ) performance++;
-            }
+                var imageProvider = ip.ImageStream();
+                List<(Vector<double>, int)> tmp = imageProvider
+                        .Select( i => new { pixels = i.SampledPixels, i.Label } )
+                        .Select( i => (Vector<double>.Build.DenseOfEnumerable( i.pixels ), i.Label) ).ToList();
+                var X = tmp.Select( i => i.Item1 ).ToList();
+                var Y = tmp.Select( i => i.Item2 ).ToList();
 
-            Assert.InRange(performance, 7000, total);
+                 imageProvider.Select( i => i.Label ).ToList();
+                Random r = new Random( 1 );
+                var net = new MatrixNetwork( 784 );
+                net.AddLayer( 200, r );
+                net.AddLayer( 10, r );
+                net.Train( X, Y );
+
+                int performance = 0;
+                int total = 0;
+                foreach( var el in X.Zip( Y, ( input, expected ) => new { input, expected } ) )
+                {
+                    total++;
+                    var result = net.Predict( el.input, out List<double> output );
+                    if( el.expected == result ) performance++;
+                }
+
+                Assert.InRange(performance, 6000, total);
+            }
         }
 
         #endregion

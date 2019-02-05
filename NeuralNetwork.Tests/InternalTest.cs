@@ -3,7 +3,6 @@ using System.Linq;
 using Xunit;
 using System.IO;
 
-
 using ITI.NeuralNetwork;
 
 namespace NeuralNetwork.Tests

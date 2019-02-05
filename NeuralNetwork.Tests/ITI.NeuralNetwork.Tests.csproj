@@ -15,7 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Correction\NeuralNetwork.Impl.Correction\ITI.NeuralNetwork.Impl.Correction.csproj" />
     <ProjectReference Include="..\NeuralNetwork.Impl\ITI.NeuralNetwork.Impl.csproj" />
   </ItemGroup>
 
