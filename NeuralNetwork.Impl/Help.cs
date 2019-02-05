@@ -1,5 +1,5 @@
+using MathNet.Numerics.LinearAlgebra;
 using System;
-using System.Numerics;
 
 namespace ITI.NeuralNetwork
 {

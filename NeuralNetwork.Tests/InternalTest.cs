@@ -1,21 +1,27 @@
 using System;
 using System.Linq;
-using Xunit;
 using System.IO;
+using System.Collections.Generic;
+using System.Reflection;
+using System.Text;
+using System.Threading.Tasks;
+using System.Xml.Linq;
+using NUnit.Framework;
 
 using ITI.NeuralNetwork;
 
-namespace NeuralNetwork.Tests
+namespace ITI.NeuralNetwork.Tests
 {
+    [TestFixture]
     public class InternalTest
     {
-        [Fact]
+        [Test]
         public void Test1()
         {
             Assert.True(true);
         }
 
-        [Fact]
+        [Test]
         public void ValidateDatabaseInput()
         {
 
@@ -24,23 +30,23 @@ namespace NeuralNetwork.Tests
                 var stream = i.ImageStream().GetEnumerator();
 
                 stream.MoveNext();
-                Assert.Equal( 5, stream.Current.Label );
+                Assert.That(stream.Current.Label, Is.EqualTo(5) );
 
                 stream.MoveNext();
-                Assert.Equal( 0, stream.Current.Label );
+                Assert.That( stream.Current.Label, Is.EqualTo( 0 ) );
 
                 stream.MoveNext();
-                Assert.Equal( 4, stream.Current.Label );
+                Assert.That( stream.Current.Label, Is.EqualTo( 4 ) );
 
                 stream.MoveNext();
-                Assert.Equal( 1, stream.Current.Label );
+                Assert.That( stream.Current.Label, Is.EqualTo( 1 ) );
 
                 stream.MoveNext();
-                Assert.Equal( 9, stream.Current.Label );
+                Assert.That( stream.Current.Label, Is.EqualTo( 9 ) );
             }
         }
 
-        [Fact]
+        [Test]
         public void InitialFileClamped0to1()
         {
             using( ImageProvider i = new ImageProvider() )
@@ -49,12 +55,12 @@ namespace NeuralNetwork.Tests
                 {
                     foreach(var pixel in el.SampledPixels)
                     {
-                        Assert.InRange( pixel, 0, 1 );
+                        Assert.That( pixel, Is.InRange(0, 1) );
                     }
                 }
             }
         }
-        [Fact]
+        [Test]
         public void InitialFileClamped0to256()
         {
             using( ImageProvider i = new ImageProvider() )
@@ -63,7 +69,7 @@ namespace NeuralNetwork.Tests
                 {
                     foreach(var pixel in el.Pixels())
                     {
-                        Assert.InRange( pixel, 0, 255 );
+                        Assert.That( pixel, Is.InRange(0, 255 ));
                     }
                 }
             }

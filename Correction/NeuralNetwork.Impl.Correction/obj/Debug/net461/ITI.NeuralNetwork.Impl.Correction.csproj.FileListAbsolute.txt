@@ -1,0 +1,4 @@
+C:\Users\Kévin Roussel\Desktop\ReseauDeNeuroneOfTheDead\Correction\NeuralNetwork.Impl.Correction\obj\Debug\net461\ITI.NeuralNetwork.Impl.Correction.csprojAssemblyReference.cache
+C:\Users\Kévin Roussel\Desktop\ReseauDeNeuroneOfTheDead\Correction\NeuralNetwork.Impl.Correction\obj\Debug\net461\ITI.NeuralNetwork.Impl.Correction.csproj.CoreCompileInputs.cache
+C:\Users\Kévin Roussel\Desktop\ReseauDeNeuroneOfTheDead\Correction\NeuralNetwork.Impl.Correction\obj\Debug\net461\ITI.NeuralNetwork.Impl.Correction.AssemblyInfoInputs.cache
+C:\Users\Kévin Roussel\Desktop\ReseauDeNeuroneOfTheDead\Correction\NeuralNetwork.Impl.Correction\obj\Debug\net461\ITI.NeuralNetwork.Impl.Correction.AssemblyInfo.cs

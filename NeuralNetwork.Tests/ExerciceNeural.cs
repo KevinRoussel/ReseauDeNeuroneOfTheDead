@@ -1,14 +1,18 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Xunit;
 using System.Linq;
 using MathNet.Numerics.LinearAlgebra;
+using System.Reflection;
+using System.Threading.Tasks;
+using System.Xml.Linq;
+using NUnit.Framework;
 
 using ITI.NeuralNetwork;
 
-namespace NeuralNetwork.Tests
+namespace ITI.NeuralNetwork.Tests
 {
+    [TestFixture]
     public class ExerciceNeural
     {
 
@@ -17,35 +21,34 @@ namespace NeuralNetwork.Tests
             => new Neuron() { Bias = 0.5, Weights = new List<double>() { 0.1, 0.2, 0.3 } };
 
         // Exercice 1, Neurone
-        [Fact]
+        [Test]
         void NeuronCreation()
         {
             Neuron n = SimpleNeuron();
 
-            Assert.Equal( 0.5, n.Bias );
-            Assert.Equal( 0.1, n.Weights[0]);
-            Assert.Equal( 0.2, n.Weights[1]);
-            Assert.Equal( 0.3, n.Weights[2]);
-            Assert.Equal( 3, n.Weights.Count );
+            Assert.That( n.Bias, Is.EqualTo(0.5) );
+            Assert.That(n.Weights[0]  , Is.EqualTo( 0.1 ) );
+            Assert.That(n.Weights[1]  , Is.EqualTo( 0.2 ) );
+            Assert.That(n.Weights[2]  , Is.EqualTo( 0.3 ) );
+            Assert.That(n.Weights.Count , Is.EqualTo( 3 ) );
             Assert.Throws<ArgumentOutOfRangeException>( () => { var el = n.Weights[3]; } );
         }
 
-        [Fact]
+        [Test]
         void NeuronAggregation()
         {
             Neuron n = SimpleNeuron();
 
-            Assert.InRange( n.Aggregation( new List<double>() { 0.2, 0.8, 0.1 } ), 0.71, 0.72 );
-            Assert.InRange( n.Aggregation( new List<double>() { 0.1, 0.1, 0.1 } ), 0.55, 0.56 );
+            Assert.That( n.Aggregation( new List<double>() { 0.2, 0.8, 0.1 } ), Is.InRange(0.71, 0.72) );
+            Assert.That( n.Aggregation( new List<double>() { 0.1, 0.1, 0.1 } ), Is.InRange(0.55, 0.56) );
         }
 
-        [Fact]
+        [Test]
         void NeuronActivation()
         {
             Neuron n = SimpleNeuron();
-
-            Assert.InRange( n.Activation( new List<double>() { 0.2, 0.8, 0.1 } ), 0.67, 0.68 );
-            Assert.InRange( n.Activation( new List<double>() { 0.1, 0.1, 0.1 } ), 0.63, 0.64 );
+            Assert.That( n.Activation( new List<double>() { 0.2, 0.8, 0.1 } ), Is.InRange( 0.67, 0.68) );
+            Assert.That( n.Activation( new List<double>() { 0.1, 0.1, 0.1 } ), Is.InRange( 0.63, 0.64) );
         }
         #endregion
 
@@ -54,24 +57,24 @@ namespace NeuralNetwork.Tests
         static Layer SimpleLayer()
             => new Layer() { Neurons = new List<Neuron>() { SimpleNeuron(), SimpleNeuron(), SimpleNeuron(), } };
 
-        [Fact]
+        [Test]
         void LayerCreation()
         {
             Layer l = SimpleLayer();
 
-            Assert.Equal( 0.5, l.Neurons[0].Bias );
-            Assert.Equal( 0.5, l.Neurons[1].Bias );
+            Assert.That(l.Neurons[0].Bias, Is.EqualTo(0.5) );
+            Assert.That(l.Neurons[1].Bias, Is.EqualTo(0.5) );
 
-            Assert.Equal( 0.1, l.Neurons[0].Weights[0]);
-            Assert.Equal( 0.2, l.Neurons[0].Weights[1]);
-            Assert.Equal( 0.3, l.Neurons[0].Weights[2]);
+            Assert.That( l.Neurons[0].Weights[0], Is.EqualTo( 0.1 ) );
+            Assert.That( l.Neurons[0].Weights[1], Is.EqualTo( 0.2 ) );
+            Assert.That( l.Neurons[0].Weights[2], Is.EqualTo( 0.3 ) );
 
-            Assert.Equal( 3, l.Neurons.Count );
-            Assert.Equal( 3, l.Neurons[0].Weights.Count );
-            Assert.Equal( 3, l.Neurons[2].Weights.Count );
+            Assert.That( l.Neurons.Count, Is.EqualTo( 3 ) );
+            Assert.That( l.Neurons[0].Weights.Count, Is.EqualTo( 3 ) );
+            Assert.That( l.Neurons[2].Weights.Count, Is.EqualTo( 3 ) );
         }
 
-        [Fact]
+        [Test]
         void LayerCompute()
         {
             Layer l = SimpleLayer();
@@ -80,10 +83,10 @@ namespace NeuralNetwork.Tests
             var el3 = l.Compute( new List<double>() { 1, 1, 1 } );
             var el4 = l.Compute( new List<double>() { 0, 0, 0 } );
 
-            Assert.InRange( el[0] , 0.69, 0.70 );
-            Assert.InRange( el2[0] , 0.69, 0.70 );
-            Assert.InRange( el3[0], 0.75, 0.76 );
-            Assert.InRange( el4[0], 0.62, 0.63 );
+            Assert.That( el[0]  , Is.InRange( 0.69, 0.70 ));
+            Assert.That( el2[0] , Is.InRange( 0.69, 0.70 ));
+            Assert.That( el3[0] , Is.InRange( 0.75, 0.76 ));
+            Assert.That( el4[0] , Is.InRange( 0.62, 0.63 ));
         }
 
         #endregion
@@ -96,67 +99,67 @@ namespace NeuralNetwork.Tests
         static Vector<double> BasicInput()
             => Vector<double>.Build.DenseOfArray( new[] { 0.2, 0.4 } );
 
-        [Fact]
+        [Test]
         void MatrixLayerCreation()
         {
             MatrixLayer ml = SimpleMatrixLayer();
 
-            Assert.NotNull( ml.Weights );
-            Assert.NotNull( ml.Biases );
+            Assert.That( ml.Weights, Is.Not.Null );
+            Assert.That( ml.Biases, Is.Not.Null );
 
             for(var i=0; i<ml.Weights.RowCount; i++)
             {
                 for(var j=0; j<ml.Weights.ColumnCount; j++)
                 {
-                    Assert.InRange( ml.Weights[i, j], 0, 1 );
+                    Assert.That( ml.Weights[i, j], Is.InRange(0, 1) );
                 }
             }
             for( var j = 0; j < ml.Biases.Count; j++ )
             {
-                Assert.InRange( ml.Biases[j], 0, 1 );
+                Assert.That( ml.Biases[j], Is.InRange(0, 1) );
             }
         }
 
-        [Fact]
+        [Test]
         void MatrixForward()
         {
             MatrixLayer ml = SimpleMatrixLayer();
 
             var result = ml.Forward( BasicInput() );
-            Assert.InRange(result[0], 0.67, 0.68 );
-            Assert.InRange(result[1], 0.77, 0.78 );
-            Assert.InRange(result[2], 0.59, 0.60 );
+            Assert.That(result[0], Is.InRange(0.67, 0.68) );
+            Assert.That(result[1], Is.InRange(0.77, 0.78) );
+            Assert.That(result[2], Is.InRange(0.59, 0.60) );
         }
 
-        [Fact]
+        [Test]
         void MatrixAggregation()
         {
             MatrixLayer ml = SimpleMatrixLayer();
 
             var result = ml.Aggregation( BasicInput() );
-            Assert.InRange(result[0], 0.71, 0.72 );
-            Assert.InRange(result[1], 1.22, 1.23 );
-            Assert.InRange(result[2], 0.36, 0.37 );
+            Assert.That(result[0], Is.InRange(0.71, 0.72 ));
+            Assert.That(result[1], Is.InRange(1.22, 1.23 ));
+            Assert.That(result[2], Is.InRange( 0.36, 0.37));
         }
 
-        [Fact]
+        [Test]
         void MatrixActivation()
         {
             MatrixLayer ml = SimpleMatrixLayer();
 
             var result = ml.Activation( BasicInput() );
-            Assert.InRange(result[0], 0.54, 0.55 );
-            Assert.InRange(result[1], 0.59, 0.60 );
+            Assert.That(result[0], Is.InRange(0.54, 0.55 ));
+            Assert.That(result[1], Is.InRange( 0.59, 0.60) );
         }
 
-        [Fact]
+        [Test]
         void MatrixActivationPrime()
         {
             MatrixLayer ml = SimpleMatrixLayer();
 
             var result = ml.ActivationPrime( BasicInput() );
-            Assert.InRange(result[0], 0.24, 0.25 );
-            Assert.InRange(result[1], 0.24, 0.25 );
+            Assert.That(result[0], Is.InRange(0.24, 0.25 ));
+            Assert.That(result[1], Is.InRange( 0.24, 0.25) );
         }
 
         #endregion
@@ -170,31 +173,31 @@ namespace NeuralNetwork.Tests
                 .AddLayer( 3, new Random(1) )
                 .AddLayer(2, new Random( 2 ) );
 
-        [Fact]
+        [Test]
         void NetworkCreation()
         {
             var net = SimpleMatrixNetwork();
             Random r = new Random( 1 );
-            Assert.Empty( net.Layers);
+            Assert.That( net.Layers, Is.Empty);
 
             net.AddLayer( 2, r );
-            Assert.Single( net.Layers);
+            Assert.That( net.Layers, Is.EqualTo(1));
 
             net.AddLayer( 3, r );
-            Assert.Equal( 2, net.Layers.Count() );
+            Assert.That( net.Layers.Count(), Is.EqualTo(2) );
         }
 
-        [Fact]
+        [Test]
         void NetworkFeedForward()
         {
             var net = NetworkWithLayer();
             var el = net.FeedForward( BasicInput() );
 
-            Assert.InRange( el[0], 0.81, 0.82 );
-            Assert.InRange( el[1], 0.84, 0.85 );
+            Assert.That( el[0], Is.InRange(0.81, 0.82) );
+            Assert.That( el[1], Is.InRange(0.84, 0.85) );
         }
 
-        [Fact]
+        [Test]
         void NetworkOutputDelta()
         {
             var net = NetworkWithLayer();
@@ -202,23 +205,23 @@ namespace NeuralNetwork.Tests
             Vector<double> B = Vector<double>.Build.DenseOfArray( new double[] { 1, 0 } );
             var el = net.GetOutputDelta( A, B );
 
-            Assert.Equal( -0.9 , el[0]);
-            Assert.Equal( 0.3, el[1]);
+            Assert.That(el[0], Is.EqualTo(-0.9));
+            Assert.That(el[1], Is.EqualTo(0.3) );
         }
 
-        [Fact]
+        [Test]
         void NetworkPredict()
         {
             var net = NetworkWithLayer();
             var input = BasicInput();
             var result = net.Predict(input, out List<double> t );
 
-            Assert.Equal( 1, result );
-            Assert.InRange( t[0], 0.81, 0.82 );
-            Assert.InRange( t[1], 0.84, 0.85 );
+            Assert.That( result, Is.EqualTo(1) );
+            Assert.That( t[0], Is.InRange(0.81, 0.82 ));
+            Assert.That( t[1], Is.InRange( 0.84, 0.85) );
         }
 
-        [Fact]
+        [Test]
         void TrainWorks()
         {
             using( var ip = new ImageProvider())
@@ -246,7 +249,7 @@ namespace NeuralNetwork.Tests
                     if( el.expected == result ) performance++;
                 }
 
-                Assert.InRange(performance, 6000, total);
+                Assert.That(performance, Is.InRange( 6000, total));
             }
         }
 

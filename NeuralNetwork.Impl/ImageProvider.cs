@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace ITI.NeuralNetwork
@@ -16,13 +17,26 @@ namespace ITI.NeuralNetwork
         List<DigitImage> _archive;
         bool _isFull;
 
-        public ImageProvider() : this( @"train-labels.idx1-ubyte", @"train-images.idx3-ubyte" ) { }
+        static string FindDataDirectory()
+        {
+            var start = AppDomain.CurrentDomain.BaseDirectory;
+            string result = null;
+            do
+            {
+                result = Directory.GetDirectories( start ).FirstOrDefault( i => i.Split( '\\' ).Last() == "Data" );
+                start = Directory.GetParent( start ).FullName;
 
+            } while( string.IsNullOrEmpty( result ) || Directory.GetParent( start ).FullName == start );
+            return result;
+        }
+
+        public ImageProvider() : this( FindDataDirectory()+@"\train-labels.idx1-ubyte", FindDataDirectory()+@"\train-images.idx3-ubyte" ) { }
+        
         public ImageProvider(string labelDatabasePath, string imagesDatabasePath)
         {
             // Opening data
-            ifsLabels = new FileStream( labelDatabasePath, FileMode.Open ); // test labels
-            ifsImages = new FileStream( imagesDatabasePath, FileMode.Open ); // test images
+            ifsLabels = new FileStream( labelDatabasePath, FileMode.Open, FileAccess.Read ); // test labels
+            ifsImages = new FileStream( imagesDatabasePath, FileMode.Open, FileAccess.Read ); // test images
             brLabels = new BinaryReader( ifsLabels );
             brImages = new BinaryReader( ifsImages );
 
