@@ -6,8 +6,8 @@ using System.Linq;
 using MathNet.Numerics.LinearAlgebra;
 
 
-//using ITI.NeuralNetwork.Correction;
-using ITI.NeuralNetwork;
+//using ITI.NeuralNetwork;
+using ITI.NeuralNetwork.Correction;
 
 namespace NeuralNetwork.Tests
 {
@@ -37,11 +37,8 @@ namespace NeuralNetwork.Tests
         {
             Neuron n = SimpleNeuron();
 
-            Assert.True( 0.71 < n.Aggregation( new List<double>() { 0.2, 0.8, 0.1 } ) );
-            Assert.True( 0.72 > n.Aggregation( new List<double>() { 0.2, 0.8, 0.1 } ) );
-
-            Assert.True( 0.55 < n.Aggregation( new List<double>() { 0.1, 0.1, 0.1 } ) );
-            Assert.True( 0.57 > n.Aggregation( new List<double>() { 0.1, 0.1, 0.1 } ) );
+            Assert.InRange( n.Aggregation( new List<double>() { 0.2, 0.8, 0.1 } ), 0.71, 0.72 );
+            Assert.InRange( n.Aggregation( new List<double>() { 0.1, 0.1, 0.1 } ), 0.55, 0.56 );
         }
 
         [Fact]
@@ -49,11 +46,8 @@ namespace NeuralNetwork.Tests
         {
             Neuron n = SimpleNeuron();
 
-            Assert.True( 0.67 < n.Activation( new List<double>() { 0.2, 0.8, 0.1 } ) );
-            Assert.True( 0.68 > n.Activation( new List<double>() { 0.2, 0.8, 0.1 } ) );
-
-            Assert.True( 0.63 < n.Activation( new List<double>() { 0.1, 0.1, 0.1 } ) );
-            Assert.True( 0.64 > n.Activation( new List<double>() { 0.1, 0.1, 0.1 } ) );
+            Assert.InRange( n.Activation( new List<double>() { 0.2, 0.8, 0.1 } ), 0.67, 0.68 );
+            Assert.InRange( n.Activation( new List<double>() { 0.1, 0.1, 0.1 } ), 0.63, 0.64 );
         }
         #endregion
 
@@ -88,17 +82,10 @@ namespace NeuralNetwork.Tests
             var el3 = l.Compute( new List<double>() { 1, 1, 1 } );
             var el4 = l.Compute( new List<double>() { 0, 0, 0 } );
 
-            Assert.True( el[0] > 0.69 );
-            Assert.True( el[0] < 0.70 );
-
-            Assert.True( el2[0] > 0.69 );
-            Assert.True( el2[0] < 0.70 );
-
-            Assert.True( el3[0] > 0.75 );
-            Assert.True( el3[0] < 0.76 );
-
-            Assert.True( el4[0] > 0.62 );
-            Assert.True( el4[0] < 0.63 );
+            Assert.InRange( el[0] , 0.69, 0.70 );
+            Assert.InRange( el2[0] , 0.69, 0.70 );
+            Assert.InRange( el3[0], 0.75, 0.76 );
+            Assert.InRange( el4[0], 0.62, 0.63 );
         }
 
         #endregion
@@ -116,21 +103,19 @@ namespace NeuralNetwork.Tests
         {
             MatrixLayer ml = SimpleMatrixLayer();
 
-            Assert.True( ml.Weights != null);
-            Assert.True( ml.Biases != null);
+            Assert.NotNull( ml.Weights );
+            Assert.NotNull( ml.Biases );
 
             for(var i=0; i<ml.Weights.RowCount; i++)
             {
                 for(var j=0; j<ml.Weights.ColumnCount; j++)
                 {
-                    Assert.True(ml.Weights[i,j] >= 0);
-                    Assert.True(ml.Weights[i,j] <= 1);
+                    Assert.InRange( ml.Weights[i, j], 0, 1 );
                 }
             }
             for( var j = 0; j < ml.Biases.Count; j++ )
             {
-                Assert.True( ml.Biases[j] >= 0 );
-                Assert.True( ml.Biases[j] <= 1 );
+                Assert.InRange( ml.Biases[j], 0, 1 );
             }
         }
 
@@ -140,14 +125,9 @@ namespace NeuralNetwork.Tests
             MatrixLayer ml = SimpleMatrixLayer();
 
             var result = ml.Forward( BasicInput() );
-            Assert.True(0.67 < result[0]);
-            Assert.True(0.68 > result[0]);
-
-            Assert.True( 0.77 < result[1] );
-            Assert.True( 0.78 > result[1] );
-
-            Assert.True( 0.59 < result[2] );
-            Assert.True( 0.60 > result[2] );
+            Assert.InRange(result[0], 0.67, 0.68 );
+            Assert.InRange(result[1], 0.77, 0.78 );
+            Assert.InRange(result[2], 0.59, 0.60 );
         }
 
         [Fact]
@@ -156,14 +136,9 @@ namespace NeuralNetwork.Tests
             MatrixLayer ml = SimpleMatrixLayer();
 
             var result = ml.Aggregation( BasicInput() );
-            Assert.True( 0.71 < result[0] );
-            Assert.True( 0.72 > result[0] );
-
-            Assert.True( 1.22 < result[1] );
-            Assert.True( 1.23 > result[1] );
-
-            Assert.True( 0.36 < result[2] );
-            Assert.True( 0.37 > result[2] );
+            Assert.InRange(result[0], 0.71, 0.72 );
+            Assert.InRange(result[1], 1.22, 1.23 );
+            Assert.InRange(result[2], 0.36, 0.37 );
         }
 
         [Fact]
@@ -172,11 +147,8 @@ namespace NeuralNetwork.Tests
             MatrixLayer ml = SimpleMatrixLayer();
 
             var result = ml.Activation( BasicInput() );
-            Assert.True( 0.54 < result[0] );
-            Assert.True( 0.55 > result[0] );
-
-            Assert.True( 0.59 < result[1] );
-            Assert.True( 0.60 > result[1] );
+            Assert.InRange(result[0], 0.54, 0.55 );
+            Assert.InRange(result[1], 0.59, 0.60 );
         }
 
         [Fact]
@@ -185,11 +157,8 @@ namespace NeuralNetwork.Tests
             MatrixLayer ml = SimpleMatrixLayer();
 
             var result = ml.ActivationPrime( BasicInput() );
-            Assert.True( 0.24 < result[0] );
-            Assert.True( 0.25 > result[0] );
-
-            Assert.True( 0.24 < result[1] );
-            Assert.True( 0.25 > result[1] );
+            Assert.InRange(result[0], 0.24, 0.25 );
+            Assert.InRange(result[1], 0.24, 0.25 );
         }
 
         #endregion
@@ -224,11 +193,8 @@ namespace NeuralNetwork.Tests
             var net = NetworkWithLayer();
             var el = net.FeedForward( BasicInput() );
 
-            Assert.True( 0.81 < el[0] );
-            Assert.True( 0.82 > el[0] );
-
-            Assert.True( 0.84 < el[1] );
-            Assert.True( 0.85 > el[1] );
+            Assert.InRange( el[0], 0.81, 0.82 );
+            Assert.InRange( el[1], 0.84, 0.85 );
         }
 
         [Fact]
@@ -251,12 +217,8 @@ namespace NeuralNetwork.Tests
             var result = net.Predict(input, out List<double> t );
 
             Assert.Equal( 1, result );
-
-            Assert.True( 0.81 < t[0] );
-            Assert.True( 0.82 > t[0] );
-
-            Assert.True( 0.84 < t[1] );
-            Assert.True( 0.85 > t[1] );
+            Assert.InRange( t[0], 0.81, 0.82 );
+            Assert.InRange( t[1], 0.84, 0.85 );
         }
 
         [Fact]
@@ -278,7 +240,7 @@ namespace NeuralNetwork.Tests
             var net = new MatrixNetwork( 784 );
             net.AddLayer( 200, r );
             net.AddLayer( 10, r );
-            net.Train( X, Y, 15, 0.3, 10);
+            net.Train( X, Y );
 
             int performance = 0;
             int total = 0;
@@ -288,8 +250,8 @@ namespace NeuralNetwork.Tests
                 var result = net.Predict( el.input, out List<double> output );
                 if( el.expected == result ) performance++;
             }
-            Assert.True( performance / total > 0.5 );
 
+            Assert.InRange(performance, 7000, total);
         }
 
         #endregion
