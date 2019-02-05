@@ -1,0 +1,11 @@
+C:\Users\Kévin Roussel\Desktop\ReseauDeNeuroneOfTheDead\Correction\NeuralNetwork.Impl.Correction\bin\Debug\netcoreapp2.0\ITI.NeuralNetwork.Impl.Correction.deps.json
+C:\Users\Kévin Roussel\Desktop\ReseauDeNeuroneOfTheDead\Correction\NeuralNetwork.Impl.Correction\bin\Debug\netcoreapp2.0\ITI.NeuralNetwork.Impl.Correction.runtimeconfig.json
+C:\Users\Kévin Roussel\Desktop\ReseauDeNeuroneOfTheDead\Correction\NeuralNetwork.Impl.Correction\bin\Debug\netcoreapp2.0\ITI.NeuralNetwork.Impl.Correction.runtimeconfig.dev.json
+C:\Users\Kévin Roussel\Desktop\ReseauDeNeuroneOfTheDead\Correction\NeuralNetwork.Impl.Correction\bin\Debug\netcoreapp2.0\ITI.NeuralNetwork.Impl.Correction.dll
+C:\Users\Kévin Roussel\Desktop\ReseauDeNeuroneOfTheDead\Correction\NeuralNetwork.Impl.Correction\bin\Debug\netcoreapp2.0\ITI.NeuralNetwork.Impl.Correction.pdb
+C:\Users\Kévin Roussel\Desktop\ReseauDeNeuroneOfTheDead\Correction\NeuralNetwork.Impl.Correction\obj\Debug\netcoreapp2.0\ITI.NeuralNetwork.Impl.Correction.csprojAssemblyReference.cache
+C:\Users\Kévin Roussel\Desktop\ReseauDeNeuroneOfTheDead\Correction\NeuralNetwork.Impl.Correction\obj\Debug\netcoreapp2.0\ITI.NeuralNetwork.Impl.Correction.csproj.CoreCompileInputs.cache
+C:\Users\Kévin Roussel\Desktop\ReseauDeNeuroneOfTheDead\Correction\NeuralNetwork.Impl.Correction\obj\Debug\netcoreapp2.0\ITI.NeuralNetwork.Impl.Correction.AssemblyInfoInputs.cache
+C:\Users\Kévin Roussel\Desktop\ReseauDeNeuroneOfTheDead\Correction\NeuralNetwork.Impl.Correction\obj\Debug\netcoreapp2.0\ITI.NeuralNetwork.Impl.Correction.AssemblyInfo.cs
+C:\Users\Kévin Roussel\Desktop\ReseauDeNeuroneOfTheDead\Correction\NeuralNetwork.Impl.Correction\obj\Debug\netcoreapp2.0\ITI.NeuralNetwork.Impl.Correction.dll
+C:\Users\Kévin Roussel\Desktop\ReseauDeNeuroneOfTheDead\Correction\NeuralNetwork.Impl.Correction\obj\Debug\netcoreapp2.0\ITI.NeuralNetwork.Impl.Correction.pdb
