@@ -8,14 +8,11 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using NUnit.Framework;
 
-using ITI.NeuralNetwork;
-
 namespace ITI.NeuralNetwork.Tests
 {
     [TestFixture]
     public class ExerciceNeural
     {
-
         #region Exercice 1 - Neurone
         static Neuron SimpleNeuron()
             => new Neuron() { Bias = 0.5, Weights = new List<double>() { 0.1, 0.2, 0.3 } };
