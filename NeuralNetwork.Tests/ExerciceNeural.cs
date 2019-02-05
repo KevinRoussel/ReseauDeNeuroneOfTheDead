@@ -6,7 +6,7 @@ using System.Linq;
 using MathNet.Numerics.LinearAlgebra;
 
 
-using ITI.NeuralNetwork.Correction;
+using ITI.NeuralNetwork;
 
 namespace NeuralNetwork.Tests
 {

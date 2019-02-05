@@ -1,10 +1,10 @@
 using System;
 using System.Linq;
 using Xunit;
-
-
-using ITI.NeuralNetwork.Correction;
 using System.IO;
+
+
+using ITI.NeuralNetwork;
 
 namespace NeuralNetwork.Tests
 {
@@ -48,8 +48,10 @@ namespace NeuralNetwork.Tests
             {
                 foreach( var el in i.ImageStream() )
                 {
-                    Assert.True( el.SampledPixels.Max() <= 1 );
-                    Assert.True( el.SampledPixels.Min() >= 0 );
+                    foreach(var pixel in el.SampledPixels)
+                    {
+                        Assert.InRange( pixel, 0, 1 );
+                    }
                 }
             }
         }
@@ -60,8 +62,10 @@ namespace NeuralNetwork.Tests
             {
                 foreach( var el in i.ImageStream() )
                 {
-                    Assert.True( el.Pixels().Max() <= 255 );
-                    Assert.True( el.Pixels().Min() >= 0 );
+                    foreach(var pixel in el.Pixels())
+                    {
+                        Assert.InRange( pixel, 0, 255 );
+                    }
                 }
             }
         }
