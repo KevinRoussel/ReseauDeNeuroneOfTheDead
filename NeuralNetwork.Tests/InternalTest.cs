@@ -3,8 +3,8 @@ using System.Linq;
 using Xunit;
 
 
-//using ITI.NeuralNetwork;
 using ITI.NeuralNetwork.Correction;
+using System.IO;
 
 namespace NeuralNetwork.Tests
 {
@@ -19,9 +19,8 @@ namespace NeuralNetwork.Tests
         [Fact]
         public void ValidateDatabaseInput()
         {
-            using( ImageProvider i = new ImageProvider(
-                @"F:\#FICHIER\ITI-Train\Data\train-labels.idx1-ubyte",
-                @"F:\#FICHIER\ITI-Train\Data\train-images.idx3-ubyte" ) )
+
+            using( ImageProvider i = new ImageProvider() )
             {
                 var stream = i.ImageStream().GetEnumerator();
 
@@ -45,23 +44,19 @@ namespace NeuralNetwork.Tests
         [Fact]
         public void InitialFileClamped0to1()
         {
-            using( ImageProvider i = new ImageProvider(
-                @"F:\#FICHIER\ITI-Train\Data\train-labels.idx1-ubyte",
-                @"F:\#FICHIER\ITI-Train\Data\train-images.idx3-ubyte" ) )
+            using( ImageProvider i = new ImageProvider() )
             {
-                foreach(var el in i.ImageStream())
+                foreach( var el in i.ImageStream() )
                 {
-                    Assert.True(el.SampledPixels.Max() <= 1);
-                    Assert.True(el.SampledPixels.Min() >= 0);
+                    Assert.True( el.SampledPixels.Max() <= 1 );
+                    Assert.True( el.SampledPixels.Min() >= 0 );
                 }
             }
         }
         [Fact]
         public void InitialFileClamped0to256()
         {
-            using( ImageProvider i = new ImageProvider(
-                @"F:\#FICHIER\ITI-Train\Data\train-labels.idx1-ubyte",
-                @"F:\#FICHIER\ITI-Train\Data\train-images.idx3-ubyte" ) )
+            using( ImageProvider i = new ImageProvider() )
             {
                 foreach( var el in i.ImageStream() )
                 {

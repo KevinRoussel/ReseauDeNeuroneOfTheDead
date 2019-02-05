@@ -6,7 +6,6 @@ using System.Linq;
 using MathNet.Numerics.LinearAlgebra;
 
 
-//using ITI.NeuralNetwork;
 using ITI.NeuralNetwork.Correction;
 
 namespace NeuralNetwork.Tests
@@ -14,7 +13,7 @@ namespace NeuralNetwork.Tests
     public class ExerciceNeural
     {
 
-    #region Exercice 1 - Neurone
+        #region Exercice 1 - Neurone
         static Neuron SimpleNeuron()
             => new Neuron() { Bias = 0.5, Weights = new List<double>() { 0.1, 0.2, 0.3 } };
 
@@ -51,7 +50,7 @@ namespace NeuralNetwork.Tests
         }
         #endregion
 
-    #region Exercice 2 - Layer
+        #region Exercice 2 - Layer
 
         static Layer SimpleLayer()
             => new Layer() { Neurons = new List<Neuron>() { SimpleNeuron(), SimpleNeuron(), SimpleNeuron(), } };
@@ -90,7 +89,7 @@ namespace NeuralNetwork.Tests
 
         #endregion
 
-    #region Exercice 3 - Layer Matrix
+        #region Exercice 3 - Layer Matrix
 
         static MatrixLayer SimpleMatrixLayer()
             => new MatrixLayer( 3, 2, new Random( 1 ) );
@@ -224,9 +223,7 @@ namespace NeuralNetwork.Tests
         [Fact]
         void TrainWorks()
         {
-            var imageProvider = new ImageProvider(
-                    @"F:\#FICHIER\ITI-Train\Data\train-labels.idx1-ubyte",
-                    @"F:\#FICHIER\ITI-Train\Data\train-images.idx3-ubyte")
+            var imageProvider = new ImageProvider()
                     .ImageStream();
 
             List<(Vector<double>,int)> tmp = imageProvider

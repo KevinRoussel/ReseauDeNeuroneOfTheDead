@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace ITI.NeuralNetwork.Correction
@@ -16,8 +17,21 @@ namespace ITI.NeuralNetwork.Correction
         List<DigitImage> _archive;
         bool _isFull;
 
-        public ImageProvider() : this( @"train-labels.idx1-ubyte", @"train-images.idx3-ubyte" ) { }
+        static string FindDataDirectory()
+        {
+            var start = AppDomain.CurrentDomain.BaseDirectory;
+            string result = null;
+            do
+            {
+                result = Directory.GetDirectories( start ).FirstOrDefault( i => i.Split( '\\' ).Last() == "Data" );
+                start = Directory.GetParent( start ).FullName;
 
+            } while( string.IsNullOrEmpty( result ) || Directory.GetParent( start ).FullName == start );
+            return result;
+        }
+
+        public ImageProvider() : this( FindDataDirectory()+@"\train-labels.idx1-ubyte", FindDataDirectory()+@"\train-images.idx3-ubyte" ) { }
+        
         public ImageProvider(string labelDatabasePath, string imagesDatabasePath)
         {
             // Opening data
